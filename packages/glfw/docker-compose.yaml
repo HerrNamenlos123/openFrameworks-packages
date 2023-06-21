@@ -1,0 +1,8 @@
+version: '3'
+services:
+  glfw:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./out:/out
