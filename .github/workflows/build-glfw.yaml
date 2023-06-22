@@ -32,34 +32,6 @@ jobs:
           - { os: ios, architecture: arm64, compiler: gcc }
           - { os: ios, architecture: arm64, compiler: clang }
 
-          # - os: windows
-          #   architecture: [ x64 ]
-          #   compiler: [ msvc, mingw, msys2, clang ]
-
-          # - os: linux
-          #   architecture: [ x64, arm64 ]
-          #   compiler: [ gcc, clang, mingw ]
-
-          # - os: android
-          #   architecture: [ arm64 ]
-          #   compiler: [ gcc, clang ]
-
-          # - os: emscripten
-          #   architecture: [ emscripten ]
-          #   compiler: [ emscripten ]
-
-          # - os: macos
-          #   architecture: [ x64, arm64 ]
-          #   compiler: [ gcc, clang ]
-
-          # - os: tvos
-          #   architecture: [ x64, arm64 ]
-          #   compiler: [ gcc, clang ]
-
-          # - os: ios
-          #   architecture: [ arm64 ]
-          #   compiler: [ gcc, clang ]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
