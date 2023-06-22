@@ -1,8 +1,50 @@
-version: '3'
+version: '3.4'
+
+x-package: &default
+  volumes:
+    - .:/package
+
+x-build: &build
+  context: .
+
 services:
-  glfw:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./out:/out
+  # glfw-windows-x64-msvc:
+  #   <<: *default
+  #   build:
+  #     <<: *build
+  #     args:
+  #       - OS=windows
+  #       - ARCH=x64
+  #       - COMPILER=msvc
+        
+  glfw-linux-x64-gcc7: { <<: *default, build: { <<: *build, dockerfile: linux-Dockerfile, args: [PACKAGE=glfw-linux-x64-gcc7, VERSION=3.3.8, C_COMPILER=gcc-7, CXX_COMPILER=g++-7]}}
+  # glfw-linux-x64-gcc11: { <<: *default, build: { <<: *build, dockerfile: linux-Dockerfile, args: [C_COMPILER=gcc-11, CXX_COMPILER=g++-11]}}
+  # glfw-linux-x64-clang7: { <<: *default, build: { <<: *build, dockerfile: linux-Dockerfile, args: [COMPILER_PACKAGE=clang7]}}
+  # glfw-linux-x64-mingw7: { <<: *default, build: { <<: *build, dockerfile: linux-Dockerfile, args: [COMPILER_PACKAGE=mingw7]}}
+
+  # glfw-windows-x64-clang:
+  #   <<: *default
+  #   build:
+  #     <<: *build
+  #     args:
+  #       - OS=windows
+  #       - ARCH=x64
+  #       - COMPILER=clang
+
+  # glfw-linux-x64-gcc:
+  #   <<: *default
+  #   build:
+  #     <<: *build
+  #     args:
+  #       - OS=linux
+  #       - ARCH=x64
+  #       - COMPILER=gcc
+
+  # glfw-macos-arm64-clang:
+  #   <<: *default
+  #   build:
+  #     <<: *build
+  #     args:
+  #       - OS=macos
+  #       - ARCH=arm64
+  #       - COMPILER=clang

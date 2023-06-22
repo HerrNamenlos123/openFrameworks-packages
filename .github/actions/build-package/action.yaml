@@ -1,4 +1,4 @@
-name: My Common Action
+name: Build Package
 
 runs:
   using: composite
