@@ -1,0 +1,18 @@
+name: Build glfw
+
+on:
+  push:
+    paths:
+      - 'packages/glfw/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build glfw
+        run: |
+          docker-compose --version
