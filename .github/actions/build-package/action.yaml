@@ -13,6 +13,7 @@ runs:
       run: echo "Hello from Step 2"
 
     - name: Test
+      shell: bash
       run: echo built ${{ matrix.manual.package }} for ${{ matrix.architecture }}
 
       #   - name: Build glfw
