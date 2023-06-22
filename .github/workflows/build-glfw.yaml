@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Test
-        run: echo built ${{ matrix.manual.package }} for ${{ matrix.architecture }}
+        run: echo built ${{ matrix.manual.package }} for ${{ matrix.architecture }} && pwd && ls
 
       - name: Use Common Action
         uses: ./.github/build-package-action
