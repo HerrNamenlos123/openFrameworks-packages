@@ -2,8 +2,7 @@ name: Build glfw
 
 on:
   push:
-    paths:
-      - 'packages/**'
+    branches: [ master ]
 
 jobs:
   build:
@@ -23,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Test
-        run: echo built {{ matrix.architecture }} {{ matrix.package }}
+        run: echo built ${{ matrix.manual.package }} for ${{ matrix.architecture }}
 
     #   - name: Build glfw
     #     working-directory: packages/glfw
