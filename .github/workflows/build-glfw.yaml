@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        manual:
+        include:
 
           - os: windows
             architecture: [ x64 ]
