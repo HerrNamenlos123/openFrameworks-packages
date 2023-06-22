@@ -10,15 +10,27 @@ jobs:
 
     strategy:
       matrix:
-        os:
-          - windows
-          - linux
-          - macos
-        compilers:
-          - name: msvc
-            os: windows
-          - name: clang
-            os: [ linux, macos ]
+        cfg:
+          - { os: windows, architecture: x64, compiler: msvc }
+          - { os: windows, architecture: x64, compiler: mingw }
+          - { os: windows, architecture: x64, compiler: msys2 }
+          - { os: windows, architecture: x64, compiler: clang }
+          - { os: linux, architecture: x64, compiler: gcc }
+          - { os: linux, architecture: x64, compiler: clang }
+          - { os: linux, architecture: x64, compiler: mingw }
+          - { os: android, architecture: arm64, compiler: gcc }
+          - { os: android, architecture: arm64, compiler: clang }
+          - { os: emscripten, architecture: emscripten, compiler: emscripten }
+          - { os: macos, architecture: x64, compiler: gcc }
+          - { os: macos, architecture: x64, compiler: clang }
+          - { os: macos, architecture: arm64, compiler: gcc }
+          - { os: macos, architecture: arm64, compiler: clang }
+          - { os: tvos, architecture: x64, compiler: gcc }
+          - { os: tvos, architecture: x64, compiler: clang }
+          - { os: tvos, architecture: arm64, compiler: gcc }
+          - { os: tvos, architecture: arm64, compiler: clang }
+          - { os: ios, architecture: arm64, compiler: gcc }
+          - { os: ios, architecture: arm64, compiler: clang }
 
           # - os: windows
           #   architecture: [ x64 ]
