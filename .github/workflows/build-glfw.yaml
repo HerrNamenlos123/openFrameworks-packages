@@ -3,16 +3,32 @@ name: Build glfw
 on:
   push:
     paths:
-      - 'packages/glfw/**'
+      - 'packages/**'
 
 jobs:
   build:
     runs-on: ubuntu-22.04
 
+    strategy:
+      matrix:
+        architecture: [x86_64, arm64]
+        manual:
+          - package: 'glfw'
+          - package: 'libpng'
+          - package: 'zlib'
+          - package: 'tess2'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build glfw
-        working-directory: packages/glfw
-        run: docker-compose up --build
+      - name: Test
+        run: echo built {{ matrix.architecture }} {{ matrix.package }}
+
+    #   - name: Build glfw
+    #     working-directory: packages/glfw
+    #     run: docker-compose up --build
+
+    #   - name: Upload files to a GitHub release
+    #     uses: svenstaro/upload-release-action@2.6.1
+
