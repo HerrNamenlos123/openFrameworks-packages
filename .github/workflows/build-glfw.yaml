@@ -25,7 +25,7 @@ jobs:
         run: echo built ${{ matrix.manual.package }} for ${{ matrix.architecture }} && pwd && ls .github
 
       - name: Use Common Action
-        uses: ./.github/build-package-action
+        uses: ./.github/actions/build-package
 
     #   - name: Build glfw
     #     working-directory: packages/glfw
