@@ -10,27 +10,40 @@ jobs:
 
     strategy:
       matrix:
-        architecture: [x86_64, arm64]
         manual:
-          - package: 'glfw'
-          - package: 'libpng'
-          - package: 'zlib'
-          - package: 'tess2'
+
+          - os: windows
+            architecture: [ x64 ]
+            compiler: [ msvc, mingw, msys2, clang ]
+
+          - os: linux
+            architecture: [ x64, arm64 ]
+            compiler: [ gcc, clang, mingw ]
+
+          - os: android
+            architecture: [ arm64 ]
+            compiler: [ gcc, clang ]
+
+          - os: emscripten
+            architecture: [ emscripten ]
+            compiler: [ emscripten ]
+
+          - os: macos
+            architecture: [ x64, arm64 ]
+            compiler: [ gcc, clang ]
+
+          - os: tvos
+            architecture: [ x64, arm64 ]
+            compiler: [ gcc, clang ]
+
+          - os: ios
+            architecture: [ arm64 ]
+            compiler: [ gcc, clang ]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Test
-        run: echo built ${{ matrix.manual.package }} for ${{ matrix.architecture }}
-
       - name: Use Common Action
         uses: ./.github/actions/build-package
-
-    #   - name: Build glfw
-    #     working-directory: packages/glfw
-    #     run: docker-compose up --build
-
-    #   - name: Upload files to a GitHub release
-    #     uses: svenstaro/upload-release-action@2.6.1
 

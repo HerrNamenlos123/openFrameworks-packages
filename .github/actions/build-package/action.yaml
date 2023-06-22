@@ -11,3 +11,13 @@ runs:
     - name: Step 2
       shell: bash
       run: echo "Hello from Step 2"
+
+    - name: Test
+      run: echo built ${{ matrix.manual.package }} for ${{ matrix.architecture }}
+
+      #   - name: Build glfw
+      #     working-directory: packages/glfw
+      #     run: docker-compose up --build
+  
+      #   - name: Upload files to a GitHub release
+      #     uses: svenstaro/upload-release-action@2.6.1
