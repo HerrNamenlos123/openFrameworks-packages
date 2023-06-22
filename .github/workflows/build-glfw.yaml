@@ -24,6 +24,9 @@ jobs:
       - name: Test
         run: echo built ${{ matrix.manual.package }} for ${{ matrix.architecture }}
 
+      - name: Use Common Action
+        uses: ./.github/build-package-action
+
     #   - name: Build glfw
     #     working-directory: packages/glfw
     #     run: docker-compose up --build
