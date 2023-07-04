@@ -7,8 +7,10 @@ rm -rf /tmp
 git config --global advice.detachedHead false
 git clone $GIT_REPOSITORY /tmp/source --depth 1 --branch $VERSION
 
-cmake /tmp/source -B /tmp/build-debug -DCMAKE_INSTALL_PREFIX=/tmp/install-debug \
-    -DCMAKE_BUILD_TYPE=Debug .. \
+cmake /tmp/source -B /tmp/build-debug \
+    -DCMAKE_INSTALL_PREFIX=/tmp/install-debug \
+    -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_FILE \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_C_COMPILER=$CC \
     -DCMAKE_CXX_COMPILER=$CXX \
     -DBUILD_SHARED_LIBS=OFF \
@@ -16,8 +18,10 @@ cmake /tmp/source -B /tmp/build-debug -DCMAKE_INSTALL_PREFIX=/tmp/install-debug 
     -DGLFW_BUILD_TESTS=OFF \
     -DGLFW_BUILD_DOCS=OFF
 
-cmake /tmp/source -B /tmp/build-release -DCMAKE_INSTALL_PREFIX=/tmp/install-release \
-    -DCMAKE_BUILD_TYPE=Release .. \
+cmake /tmp/source -B /tmp/build-release \
+    -DCMAKE_INSTALL_PREFIX=/tmp/install-release \
+    -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_FILE \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=$CC \
     -DCMAKE_CXX_COMPILER=$CXX \
     -DBUILD_SHARED_LIBS=OFF \
@@ -39,5 +43,3 @@ cp -r /tmp/install-release/include /tmp/archive/release
 
 mkdir -p /package/out
 cd /tmp/archive && tar -zcvf /package/out/$PACKAGE.tar.gz **
-
-cmake /tmp/archive/CMakeLists.txt -B /tmp/b

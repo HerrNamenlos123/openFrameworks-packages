@@ -3,48 +3,76 @@ version: '3.4'
 x-package: &default
   volumes:
     - .:/package
+    - ../..:/repo
 
 x-build: &build
   context: .
 
 services:
-  # glfw-windows-x64-msvc:
-  #   <<: *default
-  #   build:
-  #     <<: *build
-  #     args:
-  #       - OS=windows
-  #       - ARCH=x64
-  #       - COMPILER=msvc
         
-  glfw-linux-x64-gcc7: { <<: *default, build: { <<: *build, dockerfile: linux-Dockerfile, args: [PACKAGE=glfw-linux-x64-gcc7, VERSION=3.3.8, C_COMPILER=gcc-7, CXX_COMPILER=g++-7]}}
-  # glfw-linux-x64-gcc11: { <<: *default, build: { <<: *build, dockerfile: linux-Dockerfile, args: [C_COMPILER=gcc-11, CXX_COMPILER=g++-11]}}
-  # glfw-linux-x64-clang7: { <<: *default, build: { <<: *build, dockerfile: linux-Dockerfile, args: [COMPILER_PACKAGE=clang7]}}
-  # glfw-linux-x64-mingw7: { <<: *default, build: { <<: *build, dockerfile: linux-Dockerfile, args: [COMPILER_PACKAGE=mingw7]}}
-
-  # glfw-windows-x64-clang:
+  # glfw-linux-x64-gcc7:
   #   <<: *default
   #   build:
   #     <<: *build
+  #     dockerfile: linux/Dockerfile
   #     args:
-  #       - OS=windows
-  #       - ARCH=x64
-  #       - COMPILER=clang
+  #       - PACKAGE=glfw-linux-x64-gcc7
+  #       - VERSION=3.3.8
+  #       - CC_COMPILER_PACKAGE=gcc-7
+  #       - CC_COMPILER=gcc-7
+  #       - CXX_COMPILER_PACKAGE=g++-7
+  #       - CXX_COMPILER=g++-7
 
-  # glfw-linux-x64-gcc:
+  # glfw-linux-x64-clang7:
   #   <<: *default
   #   build:
   #     <<: *build
+  #     dockerfile: linux/Dockerfile
   #     args:
-  #       - OS=linux
-  #       - ARCH=x64
-  #       - COMPILER=gcc
-
-  # glfw-macos-arm64-clang:
+  #       - PACKAGE=glfw-linux-x64-clang7
+  #       - VERSION=3.3.8
+  #       - CC_COMPILER_PACKAGE=clang-7
+  #       - CC_COMPILER=clang-7
+  #       - CXX_COMPILER_PACKAGE=clang++-7
+  #       - CXX_COMPILER=clang++-7
+  
+  # glfw-linux-x64-mingw: 
   #   <<: *default
   #   build:
   #     <<: *build
+  #     dockerfile: linux/Dockerfile
   #     args:
-  #       - OS=macos
-  #       - ARCH=arm64
-  #       - COMPILER=clang
+  #       - PACKAGE=glfw-linux-x64-mingw
+  #       - VERSION=3.3.8
+  #       - CC_COMPILER_PACKAGE=gcc-mingw-w64
+  #       - CC_COMPILER=x86_64-w64-mingw32-gcc
+  #       - CXX_COMPILER_PACKAGE=g++-mingw-w64
+  #       - CXX_COMPILER=x86_64-w64-mingw32-g++
+  #       - TOOLCHAIN_FILE=/repo/toolchains/mingw.cmake # MinGW toolchain file
+        
+  # glfw-linux-arm64-gcc7:
+  #   <<: *default
+  #   build:
+  #     <<: *build
+  #     dockerfile: linux/Dockerfile
+  #     args:
+  #       - PACKAGE=glfw-linux-arm64-gcc7
+  #       - VERSION=3.3.8
+  #       - CC_COMPILER_PACKAGE=gcc-aarch64-linux-gnu
+  #       - CC_COMPILER=aarch64-linux-gnu-gcc
+  #       - CXX_COMPILER_PACKAGE=g++-aarch64-linux-gnu
+  #       - CXX_COMPILER=aarch64-linux-gnu-g++
+        
+  glfw-windows-amd64-vs17:
+    <<: *default
+    build:
+      <<: *build
+      dockerfile: windows/Dockerfile
+      args:
+        - GIT_REPOSITORY=https://github.com/glfw/glfw.git
+        - PACKAGE=glfw-windows-amd64-vs17
+        - VERSION=3.3.8
+        - CC_COMPILER_PACKAGE=gcc-aarch64-linux-gnu
+        - CC_COMPILER=aarch64-linux-gnu-gcc
+        - CXX_COMPILER_PACKAGE=g++-aarch64-linux-gnu
+        - CXX_COMPILER=aarch64-linux-gnu-g++
