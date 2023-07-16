@@ -5,9 +5,15 @@ runs:
 
   steps:
     - uses: seanmiddleditch/gha-setup-ninja@master
+
     - uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: ${{matrix.cfg.ARCHITECTURE}}
+
+    - uses: shogo82148/actions-setup-perl@v1
+      with:
+        perl-version: '5.32'
+
     - name: Invoke Python build script
       shell: bash
       run: |
