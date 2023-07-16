@@ -99,6 +99,8 @@ def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmak
     args_release += f' {" ".join(cmake_args)}'
     args_release += f' {" ".join(cmake_args_release)}'
 
+    print("hure")
+    cmd("dir")
     cmd(f'cmake -G Ninja {args_debug}')
     cmd(f'cmake -G Ninja {args_release}')
 
