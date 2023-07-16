@@ -15,9 +15,10 @@ runs:
         perl-version: '5.32'
 
     - name: Install Python deps
+      shell: bash
       run: |
         python3 -m pip install --upgrade pip
-        python3 -m pip install -r packages/$PACKAGE/pip.txt
+        [ -f packages/$PACKAGE/pip.txt ] && python3 -m pip install -r packages/$PACKAGE/pip.txt
 
     - name: Invoke Python build script
       shell: bash
