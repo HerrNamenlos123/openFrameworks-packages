@@ -49,14 +49,22 @@ def clone_git_repository(git_repository, git_tag, working_dir = WORKING_DIR):
     cmd(f'git clone {git_repository} {working_dir + SOURCE_DIR} --depth=1 --single-branch --branch={git_tag}')
 
 def install_build_requirements(extra_unix_dependencies = []):
-    extra_unix_dependencies += os.environ['CC_COMPILER_PACKAGE']
-    extra_unix_dependencies += os.environ['CXX_COMPILER_PACKAGE']
+    if (os.environ['CXX_COMPILER'] != 'msvc'):
+        extra_unix_dependencies += os.environ['CC_COMPILER_PACKAGE']
+
+    if (os.environ['CXX_COMPILER'] != 'msvc'):
+        extra_unix_dependencies += os.environ['CXX_COMPILER_PACKAGE']
+    
     deps = ' '.join(extra_unix_dependencies)
     cmd(f'apt-get update && apt-get install -y {deps}')
 
 def build_generic_cmake_project(cmake_args = [], working_dir = WORKING_DIR):
-    cmake_args.append(f'-DCMAKE_C_COMPILER={os.environ["CC_COMPILER"]}')
-    cmake_args.append(f'-DCMAKE_CXX_COMPILER={os.environ["CXX_COMPILER"]}')
+    if (os.environ['CXX_COMPILER'] != 'msvc'):
+        cmake_args.append(f'-DCMAKE_C_COMPILER={os.environ["CC_COMPILER"]}')
+    
+    if (os.environ['CXX_COMPILER'] != 'msvc'):
+        cmake_args.append(f'-DCMAKE_CXX_COMPILER={os.environ["CXX_COMPILER"]}')
+    
     if (os.environ["TOOLCHAIN_FILE"] != ''):
         cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={os.environ["TOOLCHAIN_FILE"]}')
 
