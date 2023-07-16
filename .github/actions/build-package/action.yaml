@@ -5,6 +5,7 @@ runs:
 
   steps:
     - uses: ilammy/msvc-dev-cmd@v1
+    - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Invoke Python build script
       shell: bash
       run: |

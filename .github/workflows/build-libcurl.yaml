@@ -42,6 +42,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Use Common Action
+      - name: Build package
         uses: ./.github/actions/build-package
 
