@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         cfg:
-          - { FULL_PACKAGE_NAME: libcurl-windows-amd64-msvc, CC_COMPILER_PACKAGE: msvc, CXX_COMPILER_PACKAGE: msvc, CC_COMPILER: msvc, CXX_COMPILER: msvc }
+          - { FULL_PACKAGE_NAME: libcurl-windows-amd64-msvc, CC_COMPILER_PACKAGE: msvc, CXX_COMPILER_PACKAGE: msvc, CC_COMPILER: msvc, CXX_COMPILER: msvc, TOOLCHAIN_FILE: "" }
           # - { os: windows, architecture: x64, compiler: mingw }
           # - { os: windows, architecture: x64, compiler: msys2 }
           # - { os: windows, architecture: x64, compiler: clang }
