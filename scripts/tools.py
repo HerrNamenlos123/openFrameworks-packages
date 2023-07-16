@@ -75,6 +75,8 @@ def build_generic_cmake_project(cmake_args = [], working_dir = WORKING_DIR):
     os.makedirs(working_dir + BUILD_DIR_DEBUG, exist_ok=True)
     os.makedirs(working_dir + BUILD_DIR_RELEASE, exist_ok=True)
 
+    cmd(f'cmake --version')
+
     cmd(f'cmake -G Ninja {working_dir + SOURCE_DIR} -B {working_dir + BUILD_DIR_DEBUG} {" ".join(cmake_args)} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_DEBUG}')
     cmd(f'cmake -G Ninja {working_dir + SOURCE_DIR} -B {working_dir + BUILD_DIR_RELEASE} {" ".join(cmake_args)} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_RELEASE}')
 
