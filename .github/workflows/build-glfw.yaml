@@ -1,44 +1,44 @@
-# name: Build glfw
+name: Build glfw
 
-# on:
-#   push:
-#     branches: [ master ]
+on:
+  push:
+    branches: [ none ]
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-22.04
+jobs:
+  build:
+    runs-on: ubuntu-22.04
 
-#     strategy:
-#       matrix:
-#         cfg:
-#           - { os: windows, architecture: x64, compiler: msvc }
-#           - { os: windows, architecture: x64, compiler: mingw }
-#           - { os: windows, architecture: x64, compiler: msys2 }
-#           - { os: windows, architecture: x64, compiler: clang }
-#           - { os: linux, architecture: x64, compiler: gcc }
-#           - { os: linux, architecture: x64, compiler: clang }
-#           - { os: linux, architecture: x64, compiler: mingw }
-#           - { os: linux, architecture: arm64, compiler: gcc }
-#           - { os: linux, architecture: arm64, compiler: clang }
-#           - { os: linux, architecture: arm64, compiler: mingw }
-#           - { os: android, architecture: arm64, compiler: gcc }
-#           - { os: android, architecture: arm64, compiler: clang }
-#           - { os: emscripten, architecture: emscripten, compiler: emscripten }
-#           - { os: macos, architecture: x64, compiler: gcc }
-#           - { os: macos, architecture: x64, compiler: clang }
-#           - { os: macos, architecture: arm64, compiler: gcc }
-#           - { os: macos, architecture: arm64, compiler: clang }
-#           - { os: tvos, architecture: x64, compiler: gcc }
-#           - { os: tvos, architecture: x64, compiler: clang }
-#           - { os: tvos, architecture: arm64, compiler: gcc }
-#           - { os: tvos, architecture: arm64, compiler: clang }
-#           - { os: ios, architecture: arm64, compiler: gcc }
-#           - { os: ios, architecture: arm64, compiler: clang }
+    strategy:
+      matrix:
+        cfg:
+          - { os: windows, architecture: x64, compiler: msvc }
+          - { os: windows, architecture: x64, compiler: mingw }
+          - { os: windows, architecture: x64, compiler: msys2 }
+          - { os: windows, architecture: x64, compiler: clang }
+          - { os: linux, architecture: x64, compiler: gcc }
+          - { os: linux, architecture: x64, compiler: clang }
+          - { os: linux, architecture: x64, compiler: mingw }
+          - { os: linux, architecture: arm64, compiler: gcc }
+          - { os: linux, architecture: arm64, compiler: clang }
+          - { os: linux, architecture: arm64, compiler: mingw }
+          - { os: android, architecture: arm64, compiler: gcc }
+          - { os: android, architecture: arm64, compiler: clang }
+          - { os: emscripten, architecture: emscripten, compiler: emscripten }
+          - { os: macos, architecture: x64, compiler: gcc }
+          - { os: macos, architecture: x64, compiler: clang }
+          - { os: macos, architecture: arm64, compiler: gcc }
+          - { os: macos, architecture: arm64, compiler: clang }
+          - { os: tvos, architecture: x64, compiler: gcc }
+          - { os: tvos, architecture: x64, compiler: clang }
+          - { os: tvos, architecture: arm64, compiler: gcc }
+          - { os: tvos, architecture: arm64, compiler: clang }
+          - { os: ios, architecture: arm64, compiler: gcc }
+          - { os: ios, architecture: arm64, compiler: clang }
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-#       - name: Use Common Action
-#         uses: ./.github/actions/build-package
+      - name: Use Common Action
+        uses: ./.github/actions/build-package
 
