@@ -76,10 +76,10 @@ def build_generic_cmake_project(cmake_args = [], working_dir = WORKING_DIR):
     cmd(f'cmake -G Ninja {working_dir + SOURCE_DIR} -B {working_dir + BUILD_DIR_DEBUG} {" ".join(cmake_args)} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_DEBUG}')
     cmd(f'cmake -G Ninja {working_dir + SOURCE_DIR} -B {working_dir + BUILD_DIR_RELEASE} {" ".join(cmake_args)} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_RELEASE}')
 
-    cmd(f'cmake --build {working_dir + BUILD_DIR_DEBUG} -j $(nproc)')
+    cmd(f'cmake --build {working_dir + BUILD_DIR_DEBUG} { "-j $(nproc)}" if os.environ["CXX_COMPILER"] != "msvc" else "" }')
     cmd(f'cmake --build {working_dir + BUILD_DIR_DEBUG} --target install')
 
-    cmd(f'cmake --build {working_dir + BUILD_DIR_RELEASE} -j $(nproc)')
+    cmd(f'cmake --build {working_dir + BUILD_DIR_RELEASE} { "-j $(nproc)}" if os.environ["CXX_COMPILER"] != "msvc" else "" }')
     cmd(f'cmake --build {working_dir + BUILD_DIR_RELEASE} --target install')
 
 def rename_debug_libfile(name, 
