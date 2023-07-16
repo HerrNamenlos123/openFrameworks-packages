@@ -2,12 +2,14 @@ import os
 import sys
 import shutil
 
+ROOT = os.getcwd()
 WORKING_DIR = 'temp'
 SOURCE_DIR = '/source'
 BUILD_DIR_DEBUG = '/build-debug'
 BUILD_DIR_RELEASE = '/build-release'
 INSTALL_DIR_DEBUG = '/install-debug'
 INSTALL_DIR_RELEASE = '/install-release'
+OUTPUT_DIR = '/out'
 
 def cmd(command):
     if os.system(command) != 0:
@@ -100,11 +102,10 @@ def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmak
     args_release += f' {" ".join(cmake_args_release)}'
 
     cmd(f'cmake -G Ninja {args_debug}')
-    cmd(f'cmake -G Ninja {args_release}')
-
     cmd(f'cmake --build {working_dir + BUILD_DIR_DEBUG} { "-j $(nproc)}" if os.environ["CXX_COMPILER"] != "msvc" else "" }')
     cmd(f'cmake --build {working_dir + BUILD_DIR_DEBUG} --target install')
 
+    cmd(f'cmake -G Ninja {args_release}')
     cmd(f'cmake --build {working_dir + BUILD_DIR_RELEASE} { "-j $(nproc)}" if os.environ["CXX_COMPILER"] != "msvc" else "" }')
     cmd(f'cmake --build {working_dir + BUILD_DIR_RELEASE} --target install')
 
@@ -135,12 +136,12 @@ def rename_debug_libfile(name,
 
 #     cmd(f'cd {WORKING_DIR}/archive && tar -zcvf /package/out/{os.environ["FULL_PACKAGE_NAME"]}.tar.gz *')
 
-def archive_generic_package(files, working_dir = WORKING_DIR, default_cmake_file = True):
+def archive_generic_package(files, working_dir = WORKING_DIR, output_dir = ROOT + OUTPUT_DIR, default_cmake_file = True):
     os.makedirs(working_dir + '/archive', exist_ok=True)
-    os.makedirs('/package/out', exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
 
     if default_cmake_file:
-        shutil.copy('/repo/cmake/generic/import.cmake', working_dir + '/archive/')
+        shutil.copy('cmake/generic/import.cmake', working_dir + '/archive/')
 
     for file in files:
         sourcefile = file[0]
@@ -149,8 +150,8 @@ def archive_generic_package(files, working_dir = WORKING_DIR, default_cmake_file
         os.makedirs(os.path.dirname(targetfile), exist_ok=True)
         
         if os.path.isdir(sourcefile):
-            shutil.copytree(sourcefile, targetfile)
+            shutil.copytree(sourcefile, targetfile, dirs_exist_ok=True)
         else:
             shutil.copy(sourcefile, targetfile)
-
-    cmd(f'cd {working_dir}/archive && tar -zcvf /package/out/{os.environ["FULL_PACKAGE_NAME"]}.tar.gz *')
+    print(f'{output_dir}/{os.environ["FULL_PACKAGE_NAME"]}.tar.gz')
+    cmd(f'cd {working_dir}/archive && tar -zcvf {output_dir}/{os.environ["FULL_PACKAGE_NAME"]}.tar.gz *')
