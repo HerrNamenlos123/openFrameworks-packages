@@ -5,9 +5,9 @@ tools.cmd("pip3 install jsonschema jinja2")
 
 tools.clone_git_repository(git_repository = "https://github.com/Mbed-TLS/mbedtls.git",
                            git_tag = "v3.4.0",
-                           working_dir = "/mbedtls")
+                           working_dir = "mbedtls")
 
-tools.build_generic_cmake_project(working_dir = "/mbedtls",
+tools.build_generic_cmake_project(working_dir = "mbedtls",
                                   cmake_args = ["-DENABLE_TESTING=OFF",
                                                 "-DENABLE_PROGRAMS=OFF",
                                                 "-DBUILD_SHARED_LIBS=OFF",
