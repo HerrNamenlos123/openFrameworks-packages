@@ -4,21 +4,10 @@ runs:
   using: composite
 
   steps:
-    - name: Step 1
+    - uses: ilammy/msvc-dev-cmd@v1
+    - name: Invoke Python build script
       shell: bash
-      run: echo "Hello from Step 1"
-
-    - name: Step 2
-      shell: bash
-      run: echo "Hello from Step 2"
-
-    - name: Test
-      shell: bash
-      run: echo built glfw on ${{ matrix.cfg.os }} in ${{ matrix.cfg.architecture }} for ${{ matrix.cfg.compiler }}
-
-      #   - name: Build glfw
-      #     working-directory: packages/glfw
-      #     run: docker-compose up --build
+      run: python3 $BUILD_SCRIPT #${{ matrix.cfg.os }} in ${{ matrix.cfg.architecture }} for ${{ matrix.cfg.compiler }}
   
       #   - name: Upload files to a GitHub release
       #     uses: svenstaro/upload-release-action@2.6.1
