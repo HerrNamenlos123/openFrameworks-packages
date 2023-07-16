@@ -15,6 +15,8 @@ tools.clone_git_repository(git_repository = "https://github.com/curl/curl.git",
 
 tools.remove_file(file = tools.WORKING_DIR + tools.SOURCE_DIR + "/CMake/FindMbedTLS.cmake") # Forcefully remove curl's FindMbedTLS.cmake to make it find ours instead
 
+tools.cmd("tree mbedtls")
+
 tools.build_generic_cmake_project(cmake_args = ["-DBUILD_SHARED_LIBS=OFF", 
                                                 "-DBUILD_CURL_EXE=OFF",
                                                 "-DENABLE_UNICODE=ON",
