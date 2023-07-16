@@ -100,12 +100,12 @@ def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmak
     args_release += f' {" ".join(cmake_args_release)}'
 
     print("hure")
-    cmd("dir")
-    cmd('dir mbedtls')
-    cmd('dir mbedtls\install-debug')
-    cmd('dir mbedtls\install-debug\lib')
-    cmd('dir mbedtls\install-debug\lib\cmake')
-    cmd('dir mbedtls\install-debug\lib\cmake\MbedTLS')
+    os.system("dir")
+    os.system('dir mbedtls')
+    os.system('dir mbedtls\install-debug')
+    os.system('dir mbedtls\install-debug\lib')
+    os.system('dir mbedtls\install-debug\lib\cmake')
+    os.system('dir mbedtls\install-debug\lib\cmake\MbedTLS')
     cmd(f'cmake -G Ninja {args_debug}')
     cmd(f'cmake -G Ninja {args_release}')
 
