@@ -7,6 +7,8 @@ runs:
     - uses: ilammy/msvc-dev-cmd@v1
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Invoke Python build script
+      with:
+        arch: ${{matrix.cfg.ARCHITECTURE}}
       shell: bash
       run: |
         FULL_PACKAGE_NAME=${{matrix.cfg.FULL_PACKAGE_NAME}} \
