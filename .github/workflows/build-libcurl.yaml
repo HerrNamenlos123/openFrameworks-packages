@@ -36,7 +36,7 @@ jobs:
           # - { os: ios, architecture: arm64, compiler: clang }
 
     env:
-      BUILD_SCRIPT: packages/libcurl/build.py
+      PACKAGE: libcurl
 
     steps:
       - name: Checkout repository

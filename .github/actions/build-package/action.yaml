@@ -7,7 +7,7 @@ runs:
     - uses: ilammy/msvc-dev-cmd@v1
     - name: Invoke Python build script
       shell: bash
-      run: python3 $BUILD_SCRIPT #${{ matrix.cfg.os }} in ${{ matrix.cfg.architecture }} for ${{ matrix.cfg.compiler }}
+      run: python3 -m packages.$PACKAGE.build #${{ matrix.cfg.os }} in ${{ matrix.cfg.architecture }} for ${{ matrix.cfg.compiler }}
   
       #   - name: Upload files to a GitHub release
       #     uses: svenstaro/upload-release-action@2.6.1
