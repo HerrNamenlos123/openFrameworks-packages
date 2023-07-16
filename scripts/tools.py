@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 
 WORKING_DIR = 'temp'
@@ -69,6 +70,7 @@ def build_generic_cmake_project(cmake_args = [], working_dir = WORKING_DIR):
         cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={os.environ["TOOLCHAIN_FILE"]}')
 
     cmake_args.append(f'-DBUILD_SHARED_LIBS=OFF')
+    cmake_args.append(f'-DPython_ROOT_DIR={os.path.dirname(sys.executable)}')
 
     os.makedirs(working_dir + BUILD_DIR_DEBUG, exist_ok=True)
     os.makedirs(working_dir + BUILD_DIR_RELEASE, exist_ok=True)
