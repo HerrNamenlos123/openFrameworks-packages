@@ -71,11 +71,10 @@ def build_generic_cmake_project(cmake_args = [], working_dir = WORKING_DIR):
 
     cmake_args.append(f'-DBUILD_SHARED_LIBS=OFF')
     cmake_args.append(f'-DPython_ROOT_DIR={os.path.dirname(sys.executable)}')
+    cmake_args.append(f'-DPython3_ROOT_DIR={os.path.dirname(sys.executable)}')
 
     os.makedirs(working_dir + BUILD_DIR_DEBUG, exist_ok=True)
     os.makedirs(working_dir + BUILD_DIR_RELEASE, exist_ok=True)
-
-    cmd(f'cmake --version')
 
     cmd(f'cmake -G Ninja {working_dir + SOURCE_DIR} -B {working_dir + BUILD_DIR_DEBUG} {" ".join(cmake_args)} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_DEBUG}')
     cmd(f'cmake -G Ninja {working_dir + SOURCE_DIR} -B {working_dir + BUILD_DIR_RELEASE} {" ".join(cmake_args)} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_RELEASE}')
