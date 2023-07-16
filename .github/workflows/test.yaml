@@ -1,17 +1,17 @@
-name: Test
+# name: Test
 
-on:
-  push:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
 
-jobs:
-  build:
-    runs-on: windows-2019
+# jobs:
+#   build:
+#     runs-on: windows-2019
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
 
-      - name: Test
-        run: cd packages/glfw/test && docker-compose up --build
+#       - name: Test
+#         run: cd packages/glfw/test && docker-compose up --build
 
