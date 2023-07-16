@@ -1,7 +1,7 @@
 import os
 import shutil
 
-WORKING_DIR = '/temp'
+WORKING_DIR = 'temp'
 SOURCE_DIR = '/source'
 BUILD_DIR_DEBUG = '/build-debug'
 BUILD_DIR_RELEASE = '/build-release'

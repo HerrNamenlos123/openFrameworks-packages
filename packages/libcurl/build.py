@@ -1,7 +1,4 @@
 from scripts import tools
-import os
-
-tools.cmd("python3 -m pip install jsonschema jinja2")
 
 tools.clone_git_repository(git_repository = "https://github.com/Mbed-TLS/mbedtls.git",
                            git_tag = "v3.4.0",
