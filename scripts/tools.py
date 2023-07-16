@@ -1,13 +1,6 @@
 import os
 import shutil
 
-LLVM_NATIVE_TOOLCHAIN = '/usr/lib/llvm-15'
-MSVC_TOOLCHAIN_FILE = '/llvm/llvm/cmake/platforms/WinMsvc.cmake'
-MSVC_HOST_ARCH = 'x86_64'
-LLVM_WINSYSROOT = '/msvc'
-MSVC_VER = '14.36.32532'
-WINSDK_VER = '10.0.22000.0'
-
 WORKING_DIR = '/temp'
 SOURCE_DIR = '/source'
 BUILD_DIR_DEBUG = '/build-debug'
@@ -56,26 +49,16 @@ def clone_git_repository(git_repository, git_tag, working_dir = WORKING_DIR):
     cmd(f'git clone {git_repository} {working_dir + SOURCE_DIR} --depth=1 --single-branch --branch={git_tag}')
 
 def install_build_requirements(extra_unix_dependencies = []):
-    if (os.environ['CXX_COMPILER'] != 'msvc'):
-        extra_unix_dependencies += os.environ['CC_COMPILER_PACKAGE']
-        extra_unix_dependencies += os.environ['CXX_COMPILER_PACKAGE']
+    extra_unix_dependencies += os.environ['CC_COMPILER_PACKAGE']
+    extra_unix_dependencies += os.environ['CXX_COMPILER_PACKAGE']
     deps = ' '.join(extra_unix_dependencies)
     cmd(f'apt-get update && apt-get install -y {deps}')
 
 def build_generic_cmake_project(cmake_args = [], working_dir = WORKING_DIR):
-    if (os.environ['CXX_COMPILER'] == 'msvc'):
-        cmake_args.append(f'-DCMAKE_SYSTEM_NAME=Windows')
-        cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={MSVC_TOOLCHAIN_FILE}')
-        cmake_args.append(f'-DHOST_ARCH={MSVC_HOST_ARCH}')
-        cmake_args.append(f'-DLLVM_NATIVE_TOOLCHAIN={LLVM_NATIVE_TOOLCHAIN}')
-        cmake_args.append(f'-DLLVM_WINSYSROOT={LLVM_WINSYSROOT}')
-        cmake_args.append(f'-DMSVC_VER={MSVC_VER}')
-        cmake_args.append(f'-DWINSDK_VER={WINSDK_VER}')
-    else:
-        cmake_args.append(f'-DCMAKE_C_COMPILER={os.environ["CC_COMPILER"]}')
-        cmake_args.append(f'-DCMAKE_CXX_COMPILER={os.environ["CXX_COMPILER"]}')
-        if (os.environ["TOOLCHAIN_FILE"] != ''):
-            cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={os.environ["TOOLCHAIN_FILE"]}')
+    cmake_args.append(f'-DCMAKE_C_COMPILER={os.environ["CC_COMPILER"]}')
+    cmake_args.append(f'-DCMAKE_CXX_COMPILER={os.environ["CXX_COMPILER"]}')
+    if (os.environ["TOOLCHAIN_FILE"] != ''):
+        cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={os.environ["TOOLCHAIN_FILE"]}')
 
     cmake_args.append(f'-DBUILD_SHARED_LIBS=OFF')
 
