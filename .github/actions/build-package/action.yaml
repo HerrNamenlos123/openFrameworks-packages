@@ -17,10 +17,8 @@ runs:
     - name: Install Python deps
       shell: bash
       run: |
-        where python3
         python3 -m pip install --upgrade pip
         [ -f packages/$PACKAGE/pip.txt ] && python3 -m pip install -r packages/$PACKAGE/pip.txt
-        python3 -m pip list
 
     - name: Invoke Python build script
       shell: bash

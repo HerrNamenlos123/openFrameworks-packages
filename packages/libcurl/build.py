@@ -16,7 +16,8 @@ tools.clone_git_repository(git_repository = "https://github.com/curl/curl.git",
 tools.build_generic_cmake_project(cmake_args = ["-DBUILD_SHARED_LIBS=OFF", 
                                                 "-DBUILD_CURL_EXE=OFF",
                                                 "-DENABLE_UNICODE=ON",
-                                                "-DCURL_USE_MBEDTLS=ON"])
+                                                "-DCURL_USE_MBEDTLS=ON"],
+                                  cmake_module_paths = ["mbedtls"],)
 
 tools.archive_generic_package(files = [
     [tools.SOURCE_DIR + "/include/openssl", "include/openssl"],

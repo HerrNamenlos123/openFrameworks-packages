@@ -59,7 +59,7 @@ def install_build_requirements(extra_unix_dependencies = []):
     deps = ' '.join(extra_unix_dependencies)
     cmd(f'apt-get update && apt-get install -y {deps}')
 
-def build_generic_cmake_project(cmake_args = [], working_dir = WORKING_DIR):
+def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmake_module_paths = [], cmake_module_path_root = ''):
     if (os.environ['CXX_COMPILER'] != 'msvc'):
         cmake_args.append(f'-DCMAKE_C_COMPILER={os.environ["CC_COMPILER"]}')
     
@@ -76,8 +76,22 @@ def build_generic_cmake_project(cmake_args = [], working_dir = WORKING_DIR):
     os.makedirs(working_dir + BUILD_DIR_DEBUG, exist_ok=True)
     os.makedirs(working_dir + BUILD_DIR_RELEASE, exist_ok=True)
 
-    cmd(f'cmake -G Ninja {working_dir + SOURCE_DIR} -B {working_dir + BUILD_DIR_DEBUG} {" ".join(cmake_args)} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_DEBUG}')
-    cmd(f'cmake -G Ninja {working_dir + SOURCE_DIR} -B {working_dir + BUILD_DIR_RELEASE} {" ".join(cmake_args)} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_RELEASE}')
+    args_debug = f'{working_dir + SOURCE_DIR}'
+    args_debug += f' -B {working_dir + BUILD_DIR_DEBUG}'
+    args_debug += f' -DCMAKE_MODULE_PATH={";".join(cmake_module_paths)};{cmake_module_path_root + INSTALL_DIR_DEBUG}'
+    args_debug += f' -DCMAKE_BUILD_TYPE=Debug'
+    args_debug += f' -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_DEBUG}'
+    args_debug += f' {" ".join(cmake_args)}'
+
+    args_release = f'{working_dir + SOURCE_DIR}'
+    args_release += f' -B {working_dir + BUILD_DIR_RELEASE}'
+    args_release += f' -DCMAKE_MODULE_PATH={";".join(cmake_module_paths)};{cmake_module_path_root + INSTALL_DIR_RELEASE}'
+    args_release += f' -DCMAKE_BUILD_TYPE=Release'
+    args_release += f' -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_RELEASE}'
+    args_release += f' {" ".join(cmake_args)}'
+
+    cmd(f'cmake -G Ninja {args_debug}')
+    cmd(f'cmake -G Ninja {args_release}')
 
     cmd(f'cmake --build {working_dir + BUILD_DIR_DEBUG} { "-j $(nproc)}" if os.environ["CXX_COMPILER"] != "msvc" else "" }')
     cmd(f'cmake --build {working_dir + BUILD_DIR_DEBUG} --target install')
