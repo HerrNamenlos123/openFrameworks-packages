@@ -13,9 +13,7 @@ tools.build_generic_cmake_project(working_dir = "mbedtls",
 tools.clone_git_repository(git_repository = "https://github.com/curl/curl.git",
                            git_tag = "curl-8_1_2")
 
-tools.replace_in_file(file = tools.WORKING_DIR + tools.SOURCE_DIR + "/CMakeLists.txt", 
-                      find = "set(CMAKE_MODULE_PATH \"${CMAKE_CURRENT_SOURCE_DIR}/CMake;${CMAKE_MODULE_PATH}\")",
-                      replace = "")
+tools.remove_file(file = tools.WORKING_DIR + tools.SOURCE_DIR + "/CMake/FindMbedTLS.cmake") # Forcefully remove curl's FindMbedTLS.cmake to make it find ours instead
 
 tools.build_generic_cmake_project(cmake_args = ["-DBUILD_SHARED_LIBS=OFF", 
                                                 "-DBUILD_CURL_EXE=OFF",

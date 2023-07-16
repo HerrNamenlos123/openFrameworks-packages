@@ -35,6 +35,9 @@ def replace_in_file(file, find, replace):
     with open(file, 'w') as f:
         f.write(content)
 
+def remove_file(file):
+    os.remove(file)
+
 def insert_before_file(file, insert):
     with open(file, 'r') as f:
         content = f.read()
