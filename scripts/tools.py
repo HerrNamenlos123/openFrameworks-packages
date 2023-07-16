@@ -87,7 +87,8 @@ def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmak
     args_debug += f' -DCMAKE_BUILD_TYPE=Debug'
     args_debug += f' -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_DEBUG}'
     args_debug += f' {" ".join(cmake_args)}'
-    args_debug += f' {" ".join(cmake_args_debug)}'
+    # args_debug += f' {" ".join(cmake_args_debug)}'
+    args_debug += f' -DMbedTLS_DIR=mbedtls/install-debug/lib/cmake/MbedTLS'
 
     args_release = f'{working_dir + SOURCE_DIR}'
     args_release += f' -B {working_dir + BUILD_DIR_RELEASE}'
@@ -97,7 +98,8 @@ def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmak
     args_release += f' -DCMAKE_BUILD_TYPE=Release'
     args_release += f' -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_RELEASE}'
     args_release += f' {" ".join(cmake_args)}'
-    args_release += f' {" ".join(cmake_args_release)}'
+    # args_release += f' {" ".join(cmake_args_release)}'
+    args_debug += f' -DMbedTLS_DIR=mbedtls/install-release/lib/cmake/MbedTLS'
 
     print("hure")
     os.system("dir")
