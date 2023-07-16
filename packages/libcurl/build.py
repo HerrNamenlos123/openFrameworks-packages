@@ -19,7 +19,8 @@ tools.build_generic_cmake_project(cmake_args = ["-DBUILD_SHARED_LIBS=OFF",
                                                 "-DBUILD_CURL_EXE=OFF",
                                                 "-DENABLE_UNICODE=ON",
                                                 "-DCURL_USE_MBEDTLS=ON"],
-                                  cmake_module_paths = ["mbedtls"],)
+                                  cmake_args_debug = f'-DMbedTLS_DIR={tools.WORKING_DIR}{tools.INSTALL_DIR_DEBUG}/lib/cmake/MbedTLS',
+                                  cmake_args_release = f'-DMbedTLS_DIR={tools.WORKING_DIR}{tools.INSTALL_DIR_RELEASE}/lib/cmake/MbedTLS')
 
 tools.archive_generic_package(files = [
     [tools.SOURCE_DIR + "/include/openssl", "include/openssl"],

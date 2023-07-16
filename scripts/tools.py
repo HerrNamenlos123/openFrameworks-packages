@@ -62,7 +62,7 @@ def install_build_requirements(extra_unix_dependencies = []):
     deps = ' '.join(extra_unix_dependencies)
     cmd(f'apt-get update && apt-get install -y {deps}')
 
-def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmake_module_paths = [], cmake_module_path_root = ''):
+def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmake_module_paths = [], cmake_module_path_root = '', cmake_args_debug = [], cmake_args_release = []):
     if (os.environ['CXX_COMPILER'] != 'msvc'):
         cmake_args.append(f'-DCMAKE_C_COMPILER={os.environ["CC_COMPILER"]}')
     
@@ -85,6 +85,7 @@ def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmak
     args_debug += f' -DCMAKE_BUILD_TYPE=Debug'
     args_debug += f' -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_DEBUG}'
     args_debug += f' {" ".join(cmake_args)}'
+    args_debug += f' {" ".join(cmake_args_debug)}'
 
     args_release = f'{working_dir + SOURCE_DIR}'
     args_release += f' -B {working_dir + BUILD_DIR_RELEASE}'
@@ -92,6 +93,7 @@ def build_generic_cmake_project(working_dir = WORKING_DIR, cmake_args = [], cmak
     args_release += f' -DCMAKE_BUILD_TYPE=Release'
     args_release += f' -DCMAKE_INSTALL_PREFIX={working_dir + INSTALL_DIR_RELEASE}'
     args_release += f' {" ".join(cmake_args)}'
+    args_release += f' {" ".join(cmake_args_release)}'
 
     cmd(f'cmake -G Ninja {args_debug}')
     cmd(f'cmake -G Ninja {args_release}')
