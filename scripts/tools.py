@@ -131,7 +131,7 @@ def archive_generic_package(package_name, files):
             os.makedirs(os.path.dirname(targetfile), exist_ok=True)
             shutil.copy(sourcefile, targetfile)
 
-    cmd(f'cd {get_archive_dir(package_name)} && tar -zcvf {get_output_dir()}/{os.environ["FULL_PACKAGE_NAME"]}.tar.gz *')
+    cmd(f'cd {get_archive_dir(package_name)} && tar -zcvf {os.sep.join([get_output_dir(), os.environ["FULL_PACKAGE_NAME"]])}.tar.gz *')
 
 def clear_temp_folder():
     if os.path.exists(os.sep.join([get_root_dir(), 'temp'])):
