@@ -1,6 +1,7 @@
 import os
 import sys
 import shutil
+import tarfile
 
 def get_root_dir():
     return os.getcwd()
@@ -131,7 +132,14 @@ def archive_generic_package(package_name, files):
             os.makedirs(os.path.dirname(targetfile), exist_ok=True)
             shutil.copy(sourcefile, targetfile)
 
-    cmd(f'cd {get_archive_dir(package_name)} && tar -cpvzf {os.sep.join([get_output_dir(), os.environ["FULL_PACKAGE_NAME"]])}.tar.gz *')
+    archive_filename = f'{os.sep.join([get_output_dir(), os.environ["FULL_PACKAGE_NAME"]])}.tar.gz'
+    if os.path.exists(archive_filename):
+        os.remove(archive_filename)
+
+    with tarfile.open(archive_filename, 'x:gz') as tar:
+        for file in os.listdir(os.path.abspath(get_archive_dir(package_name))):
+            filepath = os.sep.join([get_archive_dir(package_name), file])
+            tar.add(filepath, arcname = os.path.basename(filepath))
 
 def clear_temp_folder():
     if os.path.exists(os.sep.join([get_root_dir(), 'temp'])):
