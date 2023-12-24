@@ -34,8 +34,6 @@ tools.build_generic_cmake_project(
 )
 
 tools.archive_generic_package(package_name = 'libcurl', files = [
-    [tools.get_debug_install_dir('mbedtls'), "debug"],
-    [tools.get_release_install_dir('mbedtls'), "release"],
-    [tools.get_debug_install_dir('libcurl'), "debug"],
-    [tools.get_release_install_dir('libcurl'), "release"],
+    [tools.get_install_dir('mbedtls'), "."],
+    [tools.get_install_dir('libcurl'), "."],
 ])
