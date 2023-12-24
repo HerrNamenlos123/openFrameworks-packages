@@ -19,6 +19,9 @@ def main():
     if hasattr(builder, 'patch_sources'):
         builder.patch_sources()
 
+    if hasattr(builder, 'depends'):
+        builder.depends()
+
     if hasattr(builder, 'build'):
         builder.build()
 

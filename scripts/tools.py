@@ -4,6 +4,7 @@ import git
 import shutil
 import tarfile
 import platform
+import urllib.request
 
 class LibraryBuilder:
     def __init__(self):
@@ -23,12 +24,13 @@ class LibraryBuilder:
         self.output_dir = os.path.join(self.repo_dir, 'out')
 
         self.package_suffix = f"-{self.version}-{platform.system().lower()}-{platform.machine().lower()}-{self.cc_compiler}"
-        self.archive_filename = os.path.join(self.output_dir, f'{self.name}{self.package_suffix}.tar.gz')
+        self.archive_filename = f'{self.name}{self.package_suffix}.tar.gz'
 
         print(f'>> Building package {self.name}/{self.version}')
-        print(f'>> Cleaning working directory {self.working_dir}')
+        print(f'>> Cleaning working directory {self.working_dir} ...')
         if os.path.exists(self.working_dir):
             git.rmtree(self.working_dir)
+        print(f'>> Cleaning working directory {self.working_dir} ... Done')
 
     def cmd(self, command):
         if os.system(command) != 0:
@@ -71,6 +73,20 @@ class LibraryBuilder:
             if os.system(f'apt-get update && apt-get install -y {deps}') != 0:
                 self.cmd(f'sudo apt-get update && sudo apt-get install -y {deps}')
 
+    def pull_of_dependency(self, package, version):
+        depsdir = self.get_dependency_dir(package)
+        print(f'>> Pulling dependency {package}/{version} ...')
+        if not os.path.exists(depsdir):
+            # Download archive from GitHub
+            url = "https://github.com/HerrNamenlos123/openFrameworks-packages/releases/download/master/" + package + "-" + version + "-" + platform.system().lower() + "-" + platform.machine().lower() + "-" + self.cc_compiler + ".tar.gz"
+            archive = tarfile.open(fileobj=urllib.request.urlopen(url), mode="r|gz")
+            archive.extractall(path=depsdir)
+            archive.close()
+        print(f'>> Pulling dependency {package}/{version} ... Done')
+
+    def get_dependency_dir(self, package):
+        return os.path.join(self.working_dir, 'deps', package).replace("\\", "/")
+
     def build_generic_cmake_project(self, 
                                     cmake_args = [], 
                                     cmake_module_paths = [], 
@@ -97,8 +113,6 @@ class LibraryBuilder:
         os.makedirs(self.release_build_dir, exist_ok=True)
 
         args_debug = []
-        args_debug.append(f'{self.source_dir}')
-        args_debug.append(f'-B {self.debug_build_dir}')
         args_debug.append(f'-DCMAKE_BUILD_TYPE=Debug')
         args_debug.append(f'-DCMAKE_INSTALL_PREFIX={self.install_dir}')
         args_debug.append(' '.join(cmake_args))
@@ -106,20 +120,20 @@ class LibraryBuilder:
         args_debug.append('-DCMAKE_DEBUG_POSTFIX=-d')
 
         args_release = []
-        args_release.append(f'{self.source_dir}')
-        args_release.append(f'-B {self.release_build_dir}')
         args_release.append(f'-DCMAKE_BUILD_TYPE=Release')
         args_release.append(f'-DCMAKE_INSTALL_PREFIX={self.install_dir}')
         args_release.append(' '.join(cmake_args))
         args_release.append(' '.join(cmake_args_release))
 
-        self.cmd(f'cmake {" ".join(args_debug)}')
-        self.cmd(f'cmake --build {self.debug_build_dir} --config Debug')
-        self.cmd(f'cmake --build {self.debug_build_dir} --target install')
+        print(f'>> Building Debug configuration ...')
+        self.cmd(f'cmake {self.source_dir} -B {self.debug_build_dir} {" ".join(args_debug)}')
+        self.cmd(f'cmake --build {self.debug_build_dir} --config Debug --target install')
+        print(f'>> Building Debug configuration ... Done')
 
-        self.cmd(f'cmake {" ".join(args_release)}')
-        self.cmd(f'cmake --build {self.release_build_dir} --config Release')
-        self.cmd(f'cmake --build {self.release_build_dir} --target install')
+        print(f'>> Building Release configuration ...')
+        self.cmd(f'cmake {self.source_dir} -B {self.release_build_dir} {" ".join(args_release)}')
+        self.cmd(f'cmake --build {self.release_build_dir} --config Release --target install')
+        print(f'>> Building Release configuration ... Done')
 
     def archive_generic_package(self, files = None):
         os.makedirs(self.archive_dir, exist_ok=True)
@@ -145,10 +159,11 @@ class LibraryBuilder:
         else:
             shutil.copytree(self.install_dir, self.archive_dir, dirs_exist_ok=True)
 
-        if os.path.exists(self.archive_filename):
-            os.remove(self.archive_filename)
+        archive = os.path.join(self.output_dir, self.archive_filename)
+        if os.path.exists(archive):
+            os.remove(archive)
 
-        with tarfile.open(self.archive_filename, 'x:gz') as tar:
+        with tarfile.open(archive, 'x:gz') as tar:
             for file in os.listdir(os.path.abspath(self.archive_dir)):
                 filepath = os.path.join(self.archive_dir, file)
                 tar.add(filepath, arcname = os.path.basename(filepath))

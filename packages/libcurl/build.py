@@ -1,39 +1,34 @@
-from scripts import tools
+from scripts.tools import LibraryBuilder
 import os
 
-# Initialize the build environment
-tools.init()
+class Builder(LibraryBuilder):
+    name = "libcurl"
+    version = "8.5.0"
 
-# Build MbedTLS
-tools.clone_git_repository("mbedtls", "https://github.com/Mbed-TLS/mbedtls.git", "v3.4.0")
-tools.append_to_file( # Inject a "-d" postfix to allow combined debug/release builds
-    file = os.path.join([tools.get_source_dir('mbedtls'), "library", "CMakeLists.txt"]), 
-    append = "if(NOT DEFINED CMAKE_DEBUG_POSTFIX)\nset(CMAKE_DEBUG_POSTFIX \"-d\")\nendif()\n\n"
-)
-tools.build_generic_cmake_project("mbedtls", ["-DENABLE_TESTING=OFF", "-DENABLE_PROGRAMS=OFF", "-DGEN_FILES=ON"])
+    def source(self):
+        self.source_git_repo("https://github.com/curl/curl.git", "curl-8_5_0")
 
-# Build libcurl
-tools.clone_git_repository("libcurl", "https://github.com/curl/curl.git", "curl-8_1_2")
-# Forcefully remove curl's FindMbedTLS.cmake to make it find ours instead
-tools.remove_file(file = os.path.join([tools.get_source_dir('libcurl'), "/CMake/FindMbedTLS.cmake"]))
-tools.replace_in_file(
-    file = os.path.join([tools.get_source_dir('libcurl'), "/CMakeLists.txt"]),
-    find = "${MBEDTLS_LIBRARIES}",      # Patch it to find our MbedTLS
-    replace = "MbedTLS::mbedtls"
-)
+    def patch_sources(self):
+        self.remove_file(file = os.path.join(self.source_dir, "CMake", "FindMbedTLS.cmake"))
+        self.replace_in_file(
+            file = os.path.join(self.source_dir, "CMakeLists.txt"),
+            find = "${MBEDTLS_LIBRARIES}",
+            replace = "MbedTLS::mbedtls"
+        )
 
-tools.build_generic_cmake_project(
-    package_name = "libcurl",
-    cmake_args = [
-        f'-DMbedTLS_DIR="{os.path.join([tools.get_install_dir("mbedtls"), "lib", "cmake", "MbedTLS"])}"',
-        "-DBUILD_SHARED_LIBS=OFF", 
-        "-DBUILD_CURL_EXE=OFF",
-        "-DENABLE_UNICODE=ON",
-        "-DCURL_USE_MBEDTLS=ON"
-    ]
-)
+    def depends(self):
+        self.pull_of_dependency("mbedtls", "3.4.0")
 
-tools.archive_generic_package(package_name = 'libcurl', files = [
-    [tools.get_install_dir('mbedtls'), "."],
-    [tools.get_install_dir('libcurl'), "."],
-])
+    def build(self):
+        self.build_generic_cmake_project(
+            [
+                "-DBUILD_SHARED_LIBS=OFF", 
+                "-DBUILD_CURL_EXE=OFF",
+                "-DENABLE_UNICODE=ON",
+                "-DCURL_USE_MBEDTLS=ON",
+                f'-DCMAKE_PREFIX_PATH="{self.get_dependency_dir("mbedtls")}"',
+            ]
+        )
+        
+    def package(self):
+        self.archive_generic_package()
