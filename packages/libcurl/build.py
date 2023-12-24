@@ -10,10 +10,9 @@ class Builder(LibraryBuilder):
 
     def patch_sources(self):
         self.remove_file(file = os.path.join(self.source_dir, "CMake", "FindMbedTLS.cmake"))
-        self.replace_in_file(
+        self.append_to_file(
             file = os.path.join(self.source_dir, "CMakeLists.txt"),
-            find = "${MBEDTLS_LIBRARIES}",
-            replace = "MbedTLS::mbedtls"
+            append = "target_link_libraries(curl PUBLIC MbedTLS::mbedtls)\n",
         )
 
     def depends(self):
