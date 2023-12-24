@@ -19,13 +19,8 @@ tools.replace_in_file(
 
 tools.build_generic_cmake_project(
     package_name = "libcurl",
-    cmake_args_debug = [
-        f'-DMbedTLS_DIR="{os.sep.join([tools.get_debug_install_dir("mbedtls"), "lib", "cmake", "MbedTLS"])}"'
-    ],
-    cmake_args_release = [
-        f'-DMbedTLS_DIR="{os.sep.join([tools.get_release_install_dir("mbedtls"), "lib", "cmake", "MbedTLS"])}"'
-    ],
     cmake_args = [
+        f'-DMbedTLS_DIR="{os.sep.join([tools.get_install_dir("mbedtls"), "lib", "cmake", "MbedTLS"])}"',
         "-DBUILD_SHARED_LIBS=OFF", 
         "-DBUILD_CURL_EXE=OFF",
         "-DENABLE_UNICODE=ON",
