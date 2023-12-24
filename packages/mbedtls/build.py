@@ -1,5 +1,4 @@
 from scripts.tools import LibraryBuilder
-import os
 
 class Builder(LibraryBuilder):
     name = "mbedtls"

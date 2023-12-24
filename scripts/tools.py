@@ -7,6 +7,12 @@ import platform
 
 class LibraryBuilder:
     def __init__(self):
+        self.cc_compiler = os.environ.get('CC_COMPILER', "unknown")
+        self.cxx_compiler = os.environ.get('CXX_COMPILER', "unknown")
+        self.cc_compiler_package = os.environ.get('CC_COMPILER_PACKAGE', None)
+        self.cxx_compiler_package = os.environ.get('CXX_COMPILER_PACKAGE', None)
+        self.toolchain_file = os.environ.get('TOOLCHAIN_FILE', None)
+
         self.repo_dir = os.getcwd()
         self.working_dir = os.path.join(self.repo_dir, 'temp', self.name)
         self.source_dir = os.path.join(self.working_dir, 'source')
@@ -16,9 +22,8 @@ class LibraryBuilder:
         self.archive_dir = os.path.join(self.working_dir, 'archive')
         self.output_dir = os.path.join(self.repo_dir, 'out')
 
-        if not os.environ.get("FULL_PACKAGE_NAME", None):
-            raise Exception("FULL_PACKAGE_NAME environment variable not set")
-        self.archive_filename = os.path.join(self.output_dir, os.environ["FULL_PACKAGE_NAME"]) + ".tar.gz"
+        self.package_suffix = f"-{self.version}-{platform.system().lower()}-{platform.machine().lower()}-{self.cc_compiler}"
+        self.archive_filename = os.path.join(self.output_dir, f'{self.name}{self.package_suffix}.tar.gz')
 
         print(f'>> Building package {self.name}/{self.version}')
         print(f'>> Cleaning working directory {self.working_dir}')
@@ -56,13 +61,10 @@ class LibraryBuilder:
 
     def install_build_dependencies(self, extra_unix_dependencies = []):
         if platform.system() == 'Linux':
-            cc_compiler = os.environ.get('CC_COMPILER', None)
-            cxx_compiler = os.environ.get('CXX_COMPILER', None)
-            
-            if cc_compiler and cc_compiler != 'msvc':
+            if self.cc_compiler != "unknown" and self.cc_compiler != 'msvc':
                 extra_unix_dependencies.append(os.environ['CC_COMPILER_PACKAGE'])
 
-            if cxx_compiler and cxx_compiler != 'msvc':
+            if self.cxx_compiler != "unknown" and self.cxx_compiler != 'msvc':
                 extra_unix_dependencies.append(os.environ['CXX_COMPILER_PACKAGE'])
             
             deps = ' '.join(extra_unix_dependencies)
@@ -74,18 +76,15 @@ class LibraryBuilder:
                                     cmake_module_paths = [], 
                                     cmake_args_debug = [], 
                                     cmake_args_release = []):
-        cc_compiler = os.environ.get('CC_COMPILER', None)
-        cxx_compiler = os.environ.get('CXX_COMPILER', None)
-        toolchain_file = os.environ.get('TOOLCHAIN_FILE', None)
 
-        if cc_compiler and cc_compiler != 'msvc':
-            cmake_args.append(f'-DCMAKE_C_COMPILER={cc_compiler}')
+        if self.cc_compiler != "unknown" and self.cc_compiler != 'msvc':
+            cmake_args.append(f'-DCMAKE_C_COMPILER={self.cc_compiler}')
         
-        if cxx_compiler and cxx_compiler != 'msvc':
-            cmake_args.append(f'-DCMAKE_CXX_COMPILER={cxx_compiler}')
+        if self.cxx_compiler != "unknown" and self.cxx_compiler != 'msvc':
+            cmake_args.append(f'-DCMAKE_CXX_COMPILER={self.cxx_compiler}')
         
-        if toolchain_file:
-            cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={toolchain_file}')
+        if self.toolchain_file != None:
+            cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={self.toolchain_file}')
 
         cmake_args.append(f'-DBUILD_SHARED_LIBS=OFF')
         cmake_args.append(f'-DPython_ROOT_DIR={os.path.dirname(sys.executable)}')

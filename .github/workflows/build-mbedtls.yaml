@@ -8,12 +8,14 @@ jobs:
   build:
     runs-on: ${{ matrix.cfg.os }}
 
+    env:
+      PACKAGE: mbedtls
+
     strategy:
       fail-fast: false
       matrix:
         cfg:
           - { os: ubuntu-20.04,
-              FULL_PACKAGE_NAME: mbedtls-linux-amd64-gcc9, 
               CC_COMPILER_PACKAGE: gcc-9, 
               CXX_COMPILER_PACKAGE: g++-9, 
               CC_COMPILER: gcc-9, 
@@ -22,7 +24,6 @@ jobs:
               ARCHITECTURE: amd64
             }
           - { os: windows-2022, 
-              FULL_PACKAGE_NAME: mbedtls-windows-amd64-msvc, 
               CC_COMPILER_PACKAGE: msvc, 
               CXX_COMPILER_PACKAGE: msvc, 
               CC_COMPILER: msvc, 
@@ -52,9 +53,6 @@ jobs:
           # - { os: tvos, architecture: arm64, compiler: clang }
           # - { os: ios, architecture: arm64, compiler: gcc }
           # - { os: ios, architecture: arm64, compiler: clang }
-
-    env:
-      PACKAGE: mbedtls
 
     steps:
       - name: Checkout repository
