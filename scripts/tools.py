@@ -22,7 +22,8 @@ class LibraryBuilder:
 
         print(f'>> Building package {self.name}/{self.version}')
         print(f'>> Cleaning working directory {self.working_dir}')
-        git.rmtree(self.working_dir)
+        if os.path.exists(self.working_dir):
+            git.rmtree(self.working_dir)
 
     def cmd(self, command):
         if os.system(command) != 0:
