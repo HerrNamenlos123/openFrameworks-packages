@@ -105,11 +105,11 @@ def build_generic_cmake_project(package_name, cmake_args = [], cmake_module_path
     args_release.append(' '.join(cmake_args_release))
 
     cmd(f'cmake -G Ninja {" ".join(args_debug)}')
-    cmd(f'cmake --build {get_debug_build_dir(package_name)} --config Debug { "-j $(nproc)}" if os.environ["CXX_COMPILER"] != "msvc" else "" }')
+    cmd(f'cmake --build {get_debug_build_dir(package_name)} --config Debug {"-j $(nproc)" if os.environ["CXX_COMPILER"] != "msvc" else ""}')
     cmd(f'cmake --build {get_debug_build_dir(package_name)} --target install')
 
     cmd(f'cmake -G Ninja {" ".join(args_release)}')
-    cmd(f'cmake --build {get_release_build_dir(package_name)} --config Release { "-j $(nproc)}" if os.environ["CXX_COMPILER"] != "msvc" else "" }')
+    cmd(f'cmake --build {get_release_build_dir(package_name)} --config Release {"-j $(nproc)" if os.environ["CXX_COMPILER"] != "msvc" else ""}')
     cmd(f'cmake --build {get_release_build_dir(package_name)} --target install')
 
 def archive_generic_package(package_name, files):
