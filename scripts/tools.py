@@ -58,14 +58,15 @@ def clone_git_repository(git_repository, git_tag, package_name):
     cmd(f'git clone {git_repository} {sourcedir} --depth=1 --single-branch --branch={git_tag}')
 
 def install_build_requirements(extra_unix_dependencies = []):
-    if (os.environ['CXX_COMPILER'] != 'msvc'):
-        extra_unix_dependencies += os.environ['CC_COMPILER_PACKAGE']
+    if (os.environ['CC_COMPILER'] != 'msvc'):
+        extra_unix_dependencies.append(os.environ['CC_COMPILER_PACKAGE'])
 
     if (os.environ['CXX_COMPILER'] != 'msvc'):
-        extra_unix_dependencies += os.environ['CXX_COMPILER_PACKAGE']
+        extra_unix_dependencies.append(os.environ['CXX_COMPILER_PACKAGE'])
     
     deps = ' '.join(extra_unix_dependencies)
-    cmd(f'apt-get update && apt-get install -y {deps}')
+    if os.system(f'apt-get update && apt-get install -y {deps}') != 0:
+        cmd(f'sudo apt-get update && sudo apt-get install -y {deps}')
 
 def build_generic_cmake_project(package_name, cmake_args = [], cmake_module_paths = [], cmake_module_path_root = '', cmake_args_debug = [], cmake_args_release = []):
     if (os.environ['CXX_COMPILER'] != 'msvc'):

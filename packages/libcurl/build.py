@@ -2,6 +2,7 @@ from scripts import tools
 import os
 
 tools.clear_temp_folder()
+tools.install_build_requirements()
 tools.clone_git_repository(package_name = "mbedtls",
                            git_repository = "https://github.com/Mbed-TLS/mbedtls.git",
                            git_tag = "v3.4.0")

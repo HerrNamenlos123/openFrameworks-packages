@@ -12,3 +12,15 @@ Every package and its building container has the following structure:
  - These folders are then compressed into .zip or .tar.gz files depending on the platform
  - The archive is then written to an 'out' folder in the package subfolder: '/package/out'
  - This is the end of the docker-compose workflow, the rest is handled by the CI directly
+
+## Building manually
+
+You must have all requirements installed to compile the package.
+Run the following command in the root directory of this repository:
+
+```bash
+python -m packages.<package>.build # Or 'python3'
+
+#Example:
+# python -m packages.libcurl.build
+```

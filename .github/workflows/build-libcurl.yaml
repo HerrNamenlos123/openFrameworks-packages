@@ -11,6 +11,15 @@ jobs:
     strategy:
       matrix:
         cfg:
+          - { os: ubuntu-20.04,
+              FULL_PACKAGE_NAME: libcurl-linux-amd64-gcc9, 
+              CC_COMPILER_PACKAGE: gcc-9, 
+              CXX_COMPILER_PACKAGE: g++-9, 
+              CC_COMPILER: gcc-9, 
+              CXX_COMPILER: g++-9, 
+              TOOLCHAIN_FILE: "",
+              ARCHITECTURE: amd64
+            }
           - { os: windows-2022, 
               FULL_PACKAGE_NAME: libcurl-windows-amd64-msvc, 
               CC_COMPILER_PACKAGE: msvc, 
