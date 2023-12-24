@@ -2,6 +2,7 @@ name: Build Package
 
 runs:
   using: composite
+  permissions: write-all
 
   steps:
     - uses: seanmiddleditch/gha-setup-ninja@master
