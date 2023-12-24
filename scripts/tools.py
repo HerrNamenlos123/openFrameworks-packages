@@ -51,7 +51,7 @@ def insert_before_file(file, insert):
     with open(file, 'w') as f:
         f.write(content)
 
-def clone_git_repository(git_repository, git_tag, package_name):
+def clone_git_repository(package_name, git_repository, git_tag):
     sourcedir = get_source_dir(package_name)
 
     cmd('git config --global advice.detachedHead false')
