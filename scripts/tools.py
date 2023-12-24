@@ -2,6 +2,7 @@ import os
 import sys
 import shutil
 import tarfile
+import platform
 
 def get_root_dir():
     return os.getcwd()
@@ -58,10 +59,13 @@ def clone_git_repository(package_name, git_repository, git_tag):
     cmd(f'git clone {git_repository} {sourcedir} --depth=1 --single-branch --branch={git_tag}')
 
 def install_build_requirements(extra_unix_dependencies = []):
-    if (os.environ['CC_COMPILER'] != 'msvc'):
+    if not platform.system() == 'Linux':
+        return
+    
+    if os.environ['CC_COMPILER'] != 'msvc':
         extra_unix_dependencies.append(os.environ['CC_COMPILER_PACKAGE'])
 
-    if (os.environ['CXX_COMPILER'] != 'msvc'):
+    if os.environ['CXX_COMPILER'] != 'msvc':
         extra_unix_dependencies.append(os.environ['CXX_COMPILER_PACKAGE'])
     
     deps = ' '.join(extra_unix_dependencies)
@@ -69,13 +73,13 @@ def install_build_requirements(extra_unix_dependencies = []):
         cmd(f'sudo apt-get update && sudo apt-get install -y {deps}')
 
 def build_generic_cmake_project(package_name, cmake_args = [], cmake_module_paths = [], cmake_module_path_root = '', cmake_args_debug = [], cmake_args_release = []):
-    if (os.environ['CXX_COMPILER'] != 'msvc'):
+    if os.environ['CXX_COMPILER'] != 'msvc':
         cmake_args.append(f'-DCMAKE_C_COMPILER={os.environ["CC_COMPILER"]}')
     
-    if (os.environ['CXX_COMPILER'] != 'msvc'):
+    if os.environ['CXX_COMPILER'] != 'msvc':
         cmake_args.append(f'-DCMAKE_CXX_COMPILER={os.environ["CXX_COMPILER"]}')
     
-    if (os.environ["TOOLCHAIN_FILE"] != ''):
+    if os.environ["TOOLCHAIN_FILE"] != '':
         cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={os.environ["TOOLCHAIN_FILE"]}')
 
     cmake_args.append(f'-DBUILD_SHARED_LIBS=OFF')
@@ -120,7 +124,7 @@ def archive_generic_package(package_name, files):
         sourcefile = ''
         targetfile = ''
 
-        if (len(file) == 2):
+        if len(file) == 2:
             sourcefile = file[0]
             targetfile = os.sep.join([get_archive_dir(package_name), file[1]])
         else:
