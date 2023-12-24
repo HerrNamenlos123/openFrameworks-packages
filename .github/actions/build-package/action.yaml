@@ -19,7 +19,7 @@ runs:
       run: |
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements.txt
-        [ -f packages/$PACKAGE/requirements.txt ] && python3 -m pip install -r packages/$PACKAGE/requirements.txt
+        [ -f packages/$PACKAGE/requirements.txt ] && python3 -m pip install -r packages/$PACKAGE/requirements.txt || true
 
     - name: Invoke Python build script
       shell: bash
