@@ -35,6 +35,6 @@ runs:
     - name: Upload files to a GitHub release
       uses: svenstaro/upload-release-action@2.6.1
       with:
-        file: out/${{matrix.cfg.FULL_PACKAGE_NAME}}.tar.gz
+        file_glob: out/**.tar.gz
         tag: ${{ github.ref }}
         overwrite: true
