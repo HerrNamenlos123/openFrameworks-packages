@@ -35,6 +35,7 @@ runs:
     - name: Upload files to a GitHub release
       uses: svenstaro/upload-release-action@2.6.1
       with:
-        file_glob: out/**.tar.gz
+        file: out/**.tar.gz
+        file_glob: true
         tag: ${{ github.ref }}
         overwrite: true
