@@ -12,8 +12,7 @@ class Builder(LibraryBuilder):
         self.remove_file(file = os.path.join(self.source_dir, "CMake", "FindMbedTLS.cmake"))
         self.append_to_file(
             file = os.path.join(self.source_dir, "CMakeLists.txt"),
-            append = "target_link_libraries(libcurl_static PUBLIC MbedTLS::mbedtls)\n"
-                     "target_link_libraries(libcurl_object PUBLIC MbedTLS::mbedtls)\n",
+            append = "target_link_libraries(libcurl_static PUBLIC MbedTLS::mbedtls)\n",
         )
 
     def depends(self):
@@ -26,6 +25,7 @@ class Builder(LibraryBuilder):
                 "-DBUILD_CURL_EXE=OFF",
                 "-DENABLE_UNICODE=ON",
                 "-DCURL_USE_MBEDTLS=ON",
+                "-DSHARE_LIB_OBJECT=OFF",
                 f'-DCMAKE_PREFIX_PATH="{self.get_dependency_dir("mbedtls")}"',
             ]
         )
